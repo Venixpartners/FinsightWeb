@@ -1,8 +1,21 @@
 import { Clock } from "lucide-react";
+import { useSubscriptionPrompt } from "../../context/SubscriptionContext";
 
-export default function NewsCard({ article }) {
+export default function NewsCard({ article, sourcePage = "unknown" }) {
+  const { openSubscriptionPrompt } = useSubscriptionPrompt();
+
+  function handleClick() {
+    openSubscriptionPrompt({
+      sourcePage: "home",
+      trigger: "article_click",
+    });
+  }
+
   return (
-    <article className="group flex gap-4 border-b border-slate-200 py-4 first:pt-0 last:border-b-0">
+    <article
+      onClick={handleClick}
+      className="group flex gap-4 border-b border-slate-200 py-4 first:pt-0 last:border-b-0"
+    >
       {/* Image */}
       <div className="h-24 w-32 shrink-0 overflow-hidden rounded-lg bg-slate-100 sm:h-28 sm:w-40">
         <img

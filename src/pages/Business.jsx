@@ -1,6 +1,6 @@
 import MarketTicker from "../components/market/MarketTicker";
 
-import BusinessSubNav from "../components/business/BusinessSubNav";
+//import BusinessSubNav from "../components/business/BusinessSubNav";
 import BusinessFeatured from "../components/business/BusinessFeatured";
 import BusinessNewsGrid from "../components/business/BusinessNewsGrid";
 import BusinessSpotlight from "../components/business/BusinessSpotlight";
@@ -38,8 +38,8 @@ function Business() {
         </div>
       </section>
 
-      {/* Business navigation */}
-      <BusinessSubNav />
+      {/* Business navigation 
+      <BusinessSubNav />*/}
 
       <main className="mx-auto max-w-350 px-5 pb-16 sm:px-7">
         {/* Featured */}

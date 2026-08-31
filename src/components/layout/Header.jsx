@@ -1,4 +1,4 @@
-import { Search, Sun, BarChart3 } from "lucide-react";
+import { Search, Sun } from "lucide-react";
 
 export default function Header() {
   return (
@@ -6,8 +6,14 @@ export default function Header() {
       <div className="mx-auto flex h-18 max-w-350 items-center gap-8 px-7">
         {/* Logo */}
         <div className="flex min-w-55 items-center gap-3">
-          <div className="grid h-9 w-9 place-items-center rounded-md bg-blue-600">
-            <BarChart3 size={21} />
+          <div className="grid h-15 w-15 place-items-center rounded-">
+            {/*<BarChart3 size={21} />*/}
+            <img
+              src="/images/Finsight Logo2.png"
+              alt=""
+              width={55}
+              height={55}
+            />
           </div>
 
           <div>

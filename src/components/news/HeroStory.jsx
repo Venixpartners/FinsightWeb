@@ -1,10 +1,19 @@
 import { ArrowRight, Clock } from "lucide-react";
+import { useSubscriptionPrompt } from "../../context/SubscriptionContext";
 
-export default function HeroStory({ article }) {
+export default function HeroStory({ article, sourcePage = "home" }) {
+  const { openSubscriptionPrompt } = useSubscriptionPrompt();
+
+  function handleClick() {
+    openSubscriptionPrompt({
+      sourcePage,
+      trigger: "hero_click",
+    });
+  }
   return (
-    <article className="group">
+    <article onClick={handleClick} className="group">
       {/* Image */}
-      <div className="relative aspect-[16/9] overflow-hidden rounded-xl bg-slate-100">
+      <div className="relative aspect-video overflow-hidden rounded-xl bg-slate-100">
         <img
           src={article.image}
           alt={article.title}

@@ -1,4 +1,5 @@
 import { ArrowRight, Building2 } from "lucide-react";
+import SubscriptionGate from "../subscription/SubscriptionGate";
 
 export default function CompanySpotlight({ companies }) {
   return (
@@ -19,51 +20,54 @@ export default function CompanySpotlight({ companies }) {
 
       <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {companies.map((company) => (
-          <article
+          <SubscriptionGate
             key={company.id}
-            className="group overflow-hidden rounded-xl border border-slate-200 bg-white transition hover:-translate-y-1 hover:shadow-md"
+            sourcePage="companies"
+            trigger="company_spotlight_click"
           >
-            <div className="relative overflow-hidden">
-              <img
-                src={company.image}
-                alt={company.name}
-                className="h-52 w-full object-cover transition duration-500 group-hover:scale-[1.03]"
-              />
+            <article className="group overflow-hidden rounded-xl border border-slate-200 bg-white transition hover:-translate-y-1 hover:shadow-md">
+              <div className="relative overflow-hidden">
+                <img
+                  src={company.image}
+                  alt={company.name}
+                  className="h-52 w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+                />
 
-              <span className="absolute right-4 top-4 rounded-full bg-white/95 px-3 py-1 text-[10px] font-bold text-slate-700 shadow-sm">
-                {company.marketStatus}
-              </span>
-            </div>
-
-            <div className="p-5">
-              <div className="flex items-center gap-2">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50">
-                  <Building2 size={17} className="text-blue-600" />
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-extrabold text-slate-950">
-                    {company.name}
-                  </h3>
-
-                  <p className="text-xs text-slate-400">{company.symbol}</p>
-                </div>
+                <span className="absolute right-4 top-4 rounded-full bg-white/95 px-3 py-1 text-[10px] font-bold text-slate-700 shadow-sm">
+                  {company.marketStatus}
+                </span>
               </div>
 
-              <p className="mt-4 text-xs font-semibold text-blue-600">
-                {company.sector}
-              </p>
+              <div className="p-5">
+                <div className="flex items-center gap-2">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50">
+                    <Building2 size={17} className="text-blue-600" />
+                  </div>
 
-              <p className="mt-2 text-sm leading-6 text-slate-500">
-                {company.description}
-              </p>
+                  <div>
+                    <h3 className="text-sm font-extrabold text-slate-950">
+                      {company.name}
+                    </h3>
 
-              <button className="mt-5 flex items-center gap-1 text-sm font-bold text-slate-900 transition group-hover:text-blue-600">
-                View company
-                <ArrowRight size={15} />
-              </button>
-            </div>
-          </article>
+                    <p className="text-xs text-slate-400">{company.symbol}</p>
+                  </div>
+                </div>
+
+                <p className="mt-4 text-xs font-semibold text-blue-600">
+                  {company.sector}
+                </p>
+
+                <p className="mt-2 text-sm leading-6 text-slate-500">
+                  {company.description}
+                </p>
+
+                <button className="mt-5 flex items-center gap-1 text-sm font-bold text-slate-900 transition group-hover:text-blue-600">
+                  View company
+                  <ArrowRight size={15} />
+                </button>
+              </div>
+            </article>
+          </SubscriptionGate>
         ))}
       </div>
     </section>

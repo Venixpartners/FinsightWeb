@@ -29,8 +29,13 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="mb-4 flex items-center gap-3">
-              <div className="grid h-9 w-9 place-items-center rounded-md bg-blue-600">
-                <span className="text-lg font-bold text-white">F</span>
+              <div className="grid h-15 w-15 place-items-center rounded-md ">
+                <img
+                  src="/images/Finsight Logo2.png"
+                  alt=""
+                  width={55}
+                  height={55}
+                />
               </div>
 
               <div>
@@ -142,7 +147,7 @@ export default function Footer() {
 
       {/* Bottom Footer */}
       <div className="border-t border-slate-800">
-        <div className="mx-auto flex max-w-[1400px] flex-col gap-4 px-7 py-5 text-sm md:flex-row md:items-center md:justify-between">
+        <div className="mx-auto flex max-w-350 flex-col gap-4 px-7 py-5 text-sm md:flex-row md:items-center md:justify-between">
           <p className="text-slate-500">
             © {new Date().getFullYear()} Finsight. All rights reserved.
           </p>
