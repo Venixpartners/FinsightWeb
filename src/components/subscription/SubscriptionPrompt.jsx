@@ -31,7 +31,7 @@ export default function SubscriptionPrompt({ isOpen, onClose, onSubscribe }) {
           onClick={onSubscribe}
           className="mt-6 w-full rounded-lg bg-blue-600 px-5 py-3 font-semibold text-white hover:bg-blue-700"
         >
-          Subscribe Now
+          Subscribe Now !
         </button>
 
         <button
