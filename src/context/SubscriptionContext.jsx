@@ -1,8 +1,11 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+
 import SubscriptionPrompt from "../components/subscription/SubscriptionPrompt";
 import SubscriptionForm from "../components/subscription/SubscriptionForm";
 
 const SubscriptionContext = createContext(null);
+
+const PROMPT_DELAY = 30000; // 30 seconds
 
 export function SubscriptionProvider({ children }) {
   const [promptOpen, setPromptOpen] = useState(false);
@@ -12,6 +15,22 @@ export function SubscriptionProvider({ children }) {
     sourcePage: "unknown",
     trigger: "subscription_prompt",
   });
+
+  // Show subscription prompt automatically after 30 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!promptOpen && !formOpen) {
+        setSubscriptionContext({
+          sourcePage: window.location.pathname,
+          trigger: "timed_prompt",
+        });
+
+        setPromptOpen(true);
+      }
+    }, PROMPT_DELAY);
+
+    return () => clearTimeout(timer);
+  }, [promptOpen, formOpen]);
 
   function openSubscriptionPrompt({
     sourcePage = "unknown",
