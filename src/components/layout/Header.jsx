@@ -18,7 +18,7 @@ export default function Header() {
 
           <div>
             <h1 className="text-xl font-extrabold tracking-tight">
-              Fin<span className="text-blue-400">sight</span>
+              Fin<span className="text-purple-400">sight</span>
             </h1>
 
             <p className="text-[11px] text-slate-400">
