@@ -16,6 +16,10 @@ export async function saveSubscriptionLead({
     sourcePage: sourcePage || "unknown",
     trigger: trigger || "unknown",
 
+    // User has started the subscription process,
+    // but has not yet been verified as subscribed.
+    status: "pending",
+
     createdAt: serverTimestamp(),
   };
 

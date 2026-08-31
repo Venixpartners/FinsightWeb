@@ -44,18 +44,32 @@ export default function SubscriptionForm({
       return;
     }
 
+    // Basic Nigerian phone validation
+    const normalizedPhone = phone.replace(/\s|-/g, "");
+
+    const nigeriaPhoneRegex = /^(0\d{10}|\+234\d{10}|234\d{10})$/;
+
+    if (!nigeriaPhoneRegex.test(normalizedPhone)) {
+      setError("Please enter a valid Nigerian phone number.");
+      return;
+    }
+
     try {
       setLoading(true);
 
       await saveSubscriptionLead({
         name,
         email,
-        phone,
+        phone: normalizedPhone,
         sourcePage,
         trigger,
       });
 
-      // Send the user to the existing Finsight platform
+      if (!SUBSCRIPTION_URL) {
+        throw new Error("Subscription URL is not configured.");
+      }
+
+      // Send the user to the existing Finsight subscription platform
       window.location.assign(SUBSCRIPTION_URL);
     } catch (error) {
       console.error("Failed to save subscription lead:", error);
