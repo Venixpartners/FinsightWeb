@@ -35,11 +35,8 @@ export default function Footer() {
     <footer className="bg-[#071426] text-slate-300">
       <div className="mx-auto grid max-w-350 gap-10 px-5 py-14 sm:px-7 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
         <div>
-          <div className="mb-4 flex items-center gap-3">
+          <div className="mb-4">
             <img src="/pwa-192.png" alt="" width={44} height={44} />
-            <p className="text-xl font-extrabold text-white">
-              Fin<span className="text-purple-400">Sight</span>
-            </p>
           </div>
           <p className="max-w-sm text-sm leading-6 text-slate-400">
             Business, market and economy news for Nigeria, on the web and by SMS.

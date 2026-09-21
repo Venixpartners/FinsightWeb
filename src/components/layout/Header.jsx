@@ -17,12 +17,7 @@ export default function Header() {
       <div className="mx-auto flex h-18 max-w-350 items-center gap-4 px-5 sm:gap-8 sm:px-7">
         <Link to="/" className="flex shrink-0 items-center gap-3" aria-label="FinSight home">
           <img src="/pwa-192.png" alt="" width={44} height={44} />
-          <div>
-            <p className="text-xl font-extrabold tracking-tight">
-              Fin<span className="text-purple-400">Sight</span>
-            </p>
-            <p className="hidden text-[11px] text-slate-400 sm:block">Business. Markets. Economy.</p>
-          </div>
+          <p className="hidden text-[11px] text-slate-400 sm:block">Business. Markets. Economy.</p>
         </Link>
 
         <form onSubmit={onSubmit} role="search" className="flex h-10 max-w-137.5 flex-1 items-center gap-2 rounded-md border border-slate-600 bg-slate-900/40 px-3 text-slate-300">
