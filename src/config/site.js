@@ -5,7 +5,7 @@ export const SITE = {
   rcNumber: "RC 1907456",
   address: "35 Yesufu Sanusi Street, Surulere, Lagos, Nigeria",
   licence: "Licensed by the Nigerian Communications Commission as a value added service provider",
-  generalEmail: "paul@venixpartners.com",
+  generalEmail: "hello@venixpartners.com",
   dpo: {
     name: "Adewale Adeniji",
     title: "Data Protection Officer",
