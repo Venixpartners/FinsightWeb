@@ -7,7 +7,10 @@ function SmallMarketStory({ article }) {
       <article className="group grid grid-cols-[120px_1fr] gap-4 border-b border-slate-200 pb-5 last:border-b-0 last:pb-0">
         <div className="overflow-hidden rounded-lg">
           <img
-            src={article.image}
+            src={
+              article.image ||
+              "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=400&q=80"
+            }
             alt={article.title}
             className="h-24 w-full object-cover transition duration-300 group-hover:scale-105"
           />
@@ -32,8 +35,13 @@ function SmallMarketStory({ article }) {
   );
 }
 
-export default function MarketNews({ articles }) {
-  const [featured, ...secondary] = articles;
+export default function MarketNews({ articles = [] }) {
+  /*
+   * Protect the component from undefined/null/non-array data.
+   */
+  const safeArticles = Array.isArray(articles) ? articles : [];
+
+  const [featured, ...secondary] = safeArticles;
 
   return (
     <section className="mt-12">
@@ -58,51 +66,66 @@ export default function MarketNews({ articles }) {
         </button>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
-        {/* Featured market story */}
-        <SubscriptionGate
-          sourcePage="markets"
-          trigger="featured_market_news_click"
-        >
-          <article className="group overflow-hidden rounded-xl border border-slate-200 bg-white">
-            <div className="overflow-hidden">
-              <img
-                src={featured.image}
-                alt={featured.title}
-                className="h-[280px] w-full object-cover transition duration-500 group-hover:scale-[1.02] sm:h-[340px]"
-              />
-            </div>
+      {safeArticles.length === 0 ? (
+        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center">
+          <p className="text-sm font-medium text-slate-600">
+            Market news is currently unavailable.
+          </p>
 
-            <div className="p-5 sm:p-6">
-              <span className="text-xs font-bold uppercase tracking-wide text-blue-600">
-                {featured.category}
-              </span>
-
-              <h3 className="mt-2 text-xl font-extrabold leading-tight text-slate-950 sm:text-2xl">
-                {featured.title}
-              </h3>
-
-              <p className="mt-3 text-sm leading-6 text-slate-500">
-                {featured.description}
-              </p>
-
-              <div className="mt-4 flex items-center gap-1 text-xs text-slate-400">
-                <Clock3 size={13} />
-                {featured.publishedAt}
+          <p className="mt-1 text-xs text-slate-400">
+            Please check back shortly.
+          </p>
+        </div>
+      ) : (
+        <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+          {/* Featured market story */}
+          <SubscriptionGate
+            sourcePage="markets"
+            trigger="featured_market_news_click"
+          >
+            <article className="group overflow-hidden rounded-xl border border-slate-200 bg-white">
+              <div className="overflow-hidden">
+                <img
+                  src={
+                    featured.image ||
+                    "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=900&q=80"
+                  }
+                  alt={featured.title}
+                  className="h-[280px] w-full object-cover transition duration-500 group-hover:scale-[1.02] sm:h-[340px]"
+                />
               </div>
-            </div>
-          </article>
-        </SubscriptionGate>
 
-        {/* Secondary market stories */}
-        <div className="rounded-xl border border-slate-200 bg-white p-5">
-          <div className="space-y-5">
-            {secondary.map((article) => (
-              <SmallMarketStory key={article.id} article={article} />
-            ))}
+              <div className="p-5 sm:p-6">
+                <span className="text-xs font-bold uppercase tracking-wide text-blue-600">
+                  {featured.category}
+                </span>
+
+                <h3 className="mt-2 text-xl font-extrabold leading-tight text-slate-950 sm:text-2xl">
+                  {featured.title}
+                </h3>
+
+                <p className="mt-3 text-sm leading-6 text-slate-500">
+                  {featured.description}
+                </p>
+
+                <div className="mt-4 flex items-center gap-1 text-xs text-slate-400">
+                  <Clock3 size={13} />
+                  {featured.publishedAt}
+                </div>
+              </div>
+            </article>
+          </SubscriptionGate>
+
+          {/* Secondary market stories */}
+          <div className="rounded-xl border border-slate-200 bg-white p-5">
+            <div className="space-y-5">
+              {secondary.map((article) => (
+                <SmallMarketStory key={article.id} article={article} />
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }

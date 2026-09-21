@@ -1,19 +1,47 @@
+import { useEffect, useState } from "react";
+
 import MarketTicker from "../components/market/MarketTicker";
 
-//import BusinessSubNav from "../components/business/BusinessSubNav";
+import BusinessSubNav from "../components/business/BusinessSubNav";
 import BusinessFeatured from "../components/business/BusinessFeatured";
 import BusinessNewsGrid from "../components/business/BusinessNewsGrid";
 import BusinessSpotlight from "../components/business/BusinessSpotlight";
 
 import { mockMarkets } from "../data/mockData";
 
-import {
-  mockBusinessFeatured,
-  mockBusinessLatest,
-  mockBusinessSpotlight,
-} from "../data/businessMockData";
+import { getBusinessNews } from "../services/newsService";
 
 function Business() {
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    async function loadBusinessNews() {
+      try {
+        setLoading(true);
+
+        const news = await getBusinessNews();
+
+        setArticles(news);
+      } catch (error) {
+        console.error("Failed to load business news:", error);
+
+        setError("Unable to load business news at the moment.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadBusinessNews();
+  }, []);
+
+  const featuredStories = articles.slice(0, 4);
+
+  const latestStories = articles.slice(4, 10);
+
+  const spotlightStory = articles[0];
+
   return (
     <div className="bg-slate-50">
       {/* Market ticker */}
@@ -38,18 +66,32 @@ function Business() {
         </div>
       </section>
 
-      {/* Business navigation 
-      <BusinessSubNav />*/}
+      {/* Business navigation */}
+      <BusinessSubNav />
 
       <main className="mx-auto max-w-350 px-5 pb-16 sm:px-7">
-        {/* Featured */}
-        <BusinessFeatured stories={mockBusinessFeatured} />
+        {loading && (
+          <div className="py-16 text-center text-sm text-slate-500">
+            Loading business news...
+          </div>
+        )}
 
-        {/* Latest */}
-        <BusinessNewsGrid articles={mockBusinessLatest} />
+        {error && (
+          <div className="py-16 text-center text-sm text-red-500">{error}</div>
+        )}
 
-        {/* Spotlight */}
-        <BusinessSpotlight spotlight={mockBusinessSpotlight} />
+        {!loading && !error && articles.length > 0 && (
+          <>
+            {/* Featured */}
+            <BusinessFeatured stories={featuredStories} />
+
+            {/* Latest */}
+            <BusinessNewsGrid articles={latestStories} />
+
+            {/* Spotlight */}
+            <BusinessSpotlight spotlight={spotlightStory} />
+          </>
+        )}
       </main>
     </div>
   );

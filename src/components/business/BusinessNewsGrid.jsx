@@ -1,4 +1,5 @@
 import { Clock3 } from "lucide-react";
+import { formatPublishedDate } from "../../utils/formatDate";
 import SubscriptionGate from "../subscription/SubscriptionGate";
 
 function BusinessNewsCard({ article }) {
@@ -28,7 +29,7 @@ function BusinessNewsCard({ article }) {
 
           <div className="mt-4 flex items-center gap-1 text-xs text-slate-400">
             <Clock3 size={12} />
-            {article.publishedAt}
+            {formatPublishedDate(article.publishedAt)}
           </div>
         </div>
       </article>

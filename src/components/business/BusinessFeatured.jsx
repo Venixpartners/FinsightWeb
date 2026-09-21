@@ -1,4 +1,5 @@
 import { Clock3 } from "lucide-react";
+import { formatPublishedDate } from "../../utils/formatDate";
 import SubscriptionGate from "../subscription/SubscriptionGate";
 
 function SmallStory({ story }) {
@@ -24,7 +25,7 @@ function SmallStory({ story }) {
 
           <div className="mt-2 flex items-center gap-1 text-xs text-slate-400">
             <Clock3 size={12} />
-            {story.publishedAt}
+            {formatPublishedDate(story.publishedAt)}
           </div>
         </div>
       </article>
@@ -74,7 +75,7 @@ export default function BusinessFeatured({ stories }) {
 
               <div className="mt-4 flex items-center gap-1 text-xs text-slate-400">
                 <Clock3 size={13} />
-                {lead.publishedAt}
+                {formatPublishedDate(lead.publishedAt)}
               </div>
             </div>
           </article>
