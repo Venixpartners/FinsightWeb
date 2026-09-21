@@ -1,13 +1,49 @@
-const API_KEY = import.meta.env.VITE_GNEWS_API_KEY;
-
-const BASE_URL = "https://gnews.io/api/v4";
+const BASE_URL = "/api/gnews";
 
 const CACHE_DURATION = 1000 * 60 * 30; // 30 minutes
 
 const BUSINESS_CACHE_KEY = "finsight_business_news";
 const NIGERIA_ECONOMY_CACHE_KEY = "finsight_nigeria_economy_news";
 const GLOBAL_ECONOMY_CACHE_KEY = "finsight_global_economy_news";
-// 30 minutes
+const MARKET_NEWS_CACHE_KEY = "finsight_market_news";
+
+/**
+ * Fetch news from our Vercel API route.
+ *
+ * The GNews API key is NOT exposed to the browser.
+ * Vercel handles the request to GNews server-side.
+ */
+async function fetchGNews(query, max = 10) {
+  const url =
+    `${BASE_URL}?` +
+    new URLSearchParams({
+      q: query,
+      max: String(max),
+    });
+
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    let errorData = {};
+
+    try {
+      errorData = await response.json();
+    } catch {
+      // Ignore JSON parsing errors
+    }
+
+    console.error("GNews API error:", errorData);
+
+    throw new Error(
+      errorData.errors?.[0] ||
+        errorData.message ||
+        errorData.error ||
+        `Failed to fetch news (${response.status})`,
+    );
+  }
+
+  return response.json();
+}
 
 export async function getBusinessNews() {
   // Check cache first
@@ -16,10 +52,7 @@ export async function getBusinessNews() {
   if (cachedNews) {
     const { data, timestamp } = JSON.parse(cachedNews);
 
-    const now = Date.now();
-
-    // Use cached data if it is still valid
-    if (now - timestamp < CACHE_DURATION) {
+    if (Date.now() - timestamp < CACHE_DURATION) {
       console.log("Using cached business news");
 
       return data;
@@ -28,30 +61,10 @@ export async function getBusinessNews() {
 
   console.log("Fetching business news from GNews");
 
-  const url =
-    `${BASE_URL}/search?` +
-    new URLSearchParams({
-      q: "business Nigeria OR finance OR companies",
-      lang: "en",
-      max: "10",
-      apikey: API_KEY,
-    });
-
-  const response = await fetch(url);
-
-  if (!response.ok) {
-    const errorData = await response.json();
-
-    console.error("GNews API error:", errorData);
-
-    throw new Error(
-      errorData.errors?.[0] ||
-        errorData.message ||
-        "Failed to fetch business news",
-    );
-  }
-
-  const result = await response.json();
+  const result = await fetchGNews(
+    "business Nigeria OR finance OR companies",
+    10,
+  );
 
   const articles = result.articles.map((article, index) => ({
     id: `${article.publishedAt}-${index}`,
@@ -91,32 +104,12 @@ export async function getNigeriaEconomyNews() {
 
   console.log("Fetching Nigeria economy news from GNews");
 
-  const url =
-    `${BASE_URL}/search?` +
-    new URLSearchParams({
-      q: 'Nigeria AND (economy OR inflation OR CBN OR GDP OR "interest rates")',
-      lang: "en",
-      max: "5",
-      apikey: API_KEY,
-    });
+  const result = await fetchGNews(
+    'Nigeria AND (economy OR inflation OR CBN OR GDP OR "interest rates")',
+    5,
+  );
 
-  const response = await fetch(url);
-
-  if (!response.ok) {
-    const errorData = await response.json();
-
-    console.error("GNews Nigeria Economy API error:", errorData);
-
-    throw new Error(
-      errorData.errors?.[0] ||
-        errorData.message ||
-        `Failed to fetch Nigeria economy news (${response.status})`,
-    );
-  }
-
-  const data = await response.json();
-
-  const articles = data.articles.map((article, index) => ({
+  const articles = result.articles.map((article, index) => ({
     id: `nigeria-${article.publishedAt}-${index}`,
     title: article.title,
     description: article.description || "",
@@ -153,32 +146,12 @@ export async function getGlobalEconomyNews() {
 
   console.log("Fetching global economy news from GNews");
 
-  const url =
-    `${BASE_URL}/search?` +
-    new URLSearchParams({
-      q: "(global economy OR world economy OR IMF OR World Bank OR inflation OR GDP)",
-      lang: "en",
-      max: "5",
-      apikey: API_KEY,
-    });
+  const result = await fetchGNews(
+    "(global economy OR world economy OR IMF OR World Bank OR inflation OR GDP)",
+    5,
+  );
 
-  const response = await fetch(url);
-
-  if (!response.ok) {
-    const errorData = await response.json();
-
-    console.error("GNews Global Economy API error:", errorData);
-
-    throw new Error(
-      errorData.errors?.[0] ||
-        errorData.message ||
-        `Failed to fetch global economy news (${response.status})`,
-    );
-  }
-
-  const data = await response.json();
-
-  const articles = data.articles.map((article, index) => ({
+  const articles = result.articles.map((article, index) => ({
     id: `global-${article.publishedAt}-${index}`,
     title: article.title,
     description: article.description || "",
@@ -200,8 +173,6 @@ export async function getGlobalEconomyNews() {
   return articles;
 }
 
-const MARKET_NEWS_CACHE_KEY = "finsight_market_news";
-
 export async function getMarketNews() {
   const cachedNews = localStorage.getItem(MARKET_NEWS_CACHE_KEY);
 
@@ -217,32 +188,12 @@ export async function getMarketNews() {
 
   console.log("Fetching market news from GNews");
 
-  const url =
-    `${BASE_URL}/search?` +
-    new URLSearchParams({
-      q: "(stock market OR stock exchange OR equities OR forex OR commodities)",
-      lang: "en",
-      max: "10",
-      apikey: API_KEY,
-    });
+  const result = await fetchGNews(
+    "(stock market OR stock exchange OR equities OR forex OR commodities)",
+    10,
+  );
 
-  const response = await fetch(url);
-
-  if (!response.ok) {
-    const errorData = await response.json();
-
-    console.error("GNews Market API error:", errorData);
-
-    throw new Error(
-      errorData.errors?.[0] ||
-        errorData.message ||
-        `Failed to fetch market news (${response.status})`,
-    );
-  }
-
-  const data = await response.json();
-
-  const articles = data.articles.map((article, index) => ({
+  const articles = result.articles.map((article, index) => ({
     id: `market-${article.publishedAt}-${index}`,
     title: article.title,
     description: article.description || "",
