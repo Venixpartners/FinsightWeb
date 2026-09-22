@@ -1,12 +1,23 @@
 import { createRoot, hydrateRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import { registerSW } from "virtual:pwa-register";
 import "./index.css";
 import App, { LAZY_PAGES } from "./App.jsx";
 import { SubscriptionProvider } from "./context/SubscriptionContext.jsx";
 import { preloadPages } from "./lib/lazyPage";
 
-registerSW({ immediate: true });
+// Earlier versions installed an offline cache that could keep serving an old copy
+// of the site after an update. Remove it wherever it is still found.
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker
+    .getRegistrations()
+    .then((registrations) => {
+      registrations.forEach((registration) => registration.unregister());
+      if (registrations.length && window.caches) {
+        caches.keys().then((keys) => keys.forEach((key) => caches.delete(key)));
+      }
+    })
+    .catch(() => {});
+}
 
 const tree = (
   <BrowserRouter>

@@ -14,15 +14,12 @@ export default defineConfig(({ isSsrBuild }) => ({
     !isSsrBuild &&
       VitePWA({
         registerType: "autoUpdate",
+        // The offline cache is retired. This service worker exists only to find
+        // browsers still holding an old cache, delete it, and reload them onto the
+        // current site. Pages and files then always come fresh from the server.
+        selfDestroying: true,
+        injectRegister: false,
         includeAssets: ["favicon-32x32.png", "apple-touch-icon.png"],
-        workbox: {
-          // Cache the code and images only. Pages always come fresh from the server,
-          // so an update never leaves a visitor holding a page that points at old files.
-          globPatterns: ["**/*.{js,css,png,svg,webmanifest}"],
-          globIgnores: ["**/og-image.png"],
-          navigateFallback: null,
-          cleanupOutdatedCaches: true,
-        },
         manifest: {
           name: "FinSight",
           short_name: "FinSight",
