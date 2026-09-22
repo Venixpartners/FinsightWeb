@@ -29,11 +29,12 @@ function Home() {
 
   return (
     <div className="mx-auto max-w-350 px-5 py-8 sm:px-7">
+      <h1 className="sr-only">Nigerian business, markets and economy news</h1>
       <nav aria-label="Quick topics" className="mb-8 flex items-center gap-2 overflow-x-auto">
         <span className="shrink-0 text-sm font-semibold text-slate-700">Quick topics</span>
         {quickTopics.map((t) => (
           <Link key={t} to={`/search?q=${encodeURIComponent(t)}`}
-            className="shrink-0 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:border-blue-300 hover:text-blue-700">
+            className="shrink-0 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 hover:border-blue-300 hover:text-blue-700">
             {t}
           </Link>
         ))}
@@ -77,7 +78,7 @@ function Home() {
       <section className="mt-14">
         <SectionHeading title="Key economic figures"
           description="The latest official numbers, with the date each was published."
-          action={<Link to="/economy" className="shrink-0 text-sm font-semibold text-blue-700">Economy news</Link>} />
+          action={<Link to="/economy" className="shrink-0 py-2 text-sm font-semibold text-blue-700">Economy news</Link>} />
         <IndicatorGrid />
       </section>
 

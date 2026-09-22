@@ -1,11 +1,16 @@
 // Loading, error and empty states shared by every news section.
-export function NewsLoading({ rows = 4 }) {
+// Shaped like the lead story plus list so the page does not jump when stories arrive.
+export function NewsLoading({ rows = 5 }) {
+  const block = "animate-pulse rounded-xl bg-slate-200/70 motion-reduce:animate-none";
   return (
-    <div className="space-y-4" aria-busy="true" aria-live="polite">
+    <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]" aria-busy="true" aria-live="polite">
       <span className="sr-only">Loading stories</span>
-      {Array.from({ length: rows }).map((_, i) => (
-        <div key={i} className="h-20 animate-pulse rounded-lg bg-slate-200/70 motion-reduce:animate-none" />
-      ))}
+      <div className={`${block} h-80 sm:h-96`} />
+      <div className="space-y-4 rounded-xl border border-slate-200 bg-white p-5">
+        {Array.from({ length: Math.min(rows, 5) }).map((_, i) => (
+          <div key={i} className={`${block} h-16`} />
+        ))}
+      </div>
     </div>
   );
 }

@@ -21,6 +21,7 @@ function Search() {
       <PageIntro title={q ? `Results for "${q}"` : "Search"}
         description="Searches the headlines and summaries FinSight has collected over roughly the last few days." />
       <div className="mx-auto max-w-350 px-5 py-10 sm:px-7">
+        <h2 className="sr-only">Search results</h2>
         {q ? (
           <NewsState state={state} rows={6} emptyText={`No recent stories mention "${q}".`}>
             {(stories, data) => (

@@ -25,7 +25,7 @@ export default function Header() {
           <label htmlFor="site-search" className="sr-only">Search stories</label>
           <input id="site-search" type="search" value={q} onChange={(e) => setQ(e.target.value)}
             placeholder="Search stories"
-            className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-slate-400" />
+            className="h-full min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-slate-400" />
         </form>
 
         <Link to="/subscribe"

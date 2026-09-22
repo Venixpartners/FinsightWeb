@@ -13,9 +13,18 @@ function Meta({ story }) {
   );
 }
 
-function Thumb({ src, className }) {
+// If a publisher image fails, the box keeps its size and shows the source name,
+// so the text around it does not jump.
+function Thumb({ src, className, source }) {
   const [failed, setFailed] = useState(false);
-  if (!src || failed) return null;
+  if (!src) return null;
+  if (failed) {
+    return (
+      <div className={`flex items-center justify-center bg-slate-100 p-2 text-center text-xs font-semibold text-slate-600 ${className}`}>
+        {source}
+      </div>
+    );
+  }
   return (
     <div className={`overflow-hidden bg-slate-100 ${className}`}>
       <img
@@ -44,7 +53,7 @@ export default function StoryCard({ story, variant = "compact" }) {
     return (
       <article className="group overflow-hidden rounded-xl border border-slate-200 bg-white">
         <a {...linkProps} className="block focus-visible:outline-2 focus-visible:outline-blue-600">
-          <Thumb src={story.image} className="aspect-video" />
+          <Thumb src={story.image} source={story.source} className="aspect-video" />
           <div className="p-5 sm:p-6">
             <h3 className="text-xl font-extrabold leading-tight text-slate-950 group-hover:text-blue-700 sm:text-2xl">
               {story.title}
@@ -64,7 +73,7 @@ export default function StoryCard({ story, variant = "compact" }) {
     return (
       <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white">
         <a {...linkProps} className="flex h-full flex-col focus-visible:outline-2 focus-visible:outline-blue-600">
-          <Thumb src={story.image} className="h-44" />
+          <Thumb src={story.image} source={story.source} className="h-44" />
           <div className="flex flex-1 flex-col p-5">
             <h3 className="text-base font-bold leading-6 text-slate-900 group-hover:text-blue-700">{story.title}</h3>
             {story.description && (
@@ -82,7 +91,7 @@ export default function StoryCard({ story, variant = "compact" }) {
   return (
     <article className="group border-b border-slate-200 py-4 first:pt-0 last:border-b-0 last:pb-0">
       <a {...linkProps} className="flex gap-4 focus-visible:outline-2 focus-visible:outline-blue-600">
-        <Thumb src={story.image} className="h-20 w-28 shrink-0 rounded-lg sm:h-24 sm:w-32" />
+        <Thumb src={story.image} source={story.source} className="h-20 w-28 shrink-0 rounded-lg sm:h-24 sm:w-32" />
         <div className="min-w-0 flex-1">
           <h3 className="line-clamp-3 text-sm font-bold leading-5 text-slate-900 group-hover:text-blue-700 sm:text-base">
             {story.title}

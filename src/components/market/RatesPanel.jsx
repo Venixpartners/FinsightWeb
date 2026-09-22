@@ -21,7 +21,10 @@ export default function RatesPanel() {
   const btc = state.data?.btc;
 
   return (
-    <section className="rounded-xl border border-slate-200 bg-white" aria-labelledby="rates-heading">
+    <section
+      className={`rounded-xl border border-slate-200 bg-white ${state.data ? "" : "min-h-[445px]"}`}
+      aria-labelledby="rates-heading"
+    >
       <div className="flex items-center gap-2 border-b border-slate-200 px-5 py-4">
         <CircleDollarSign size={18} className="text-blue-700" aria-hidden="true" />
         <h2 id="rates-heading" className="text-base font-extrabold text-slate-950">

@@ -55,7 +55,7 @@ export default function Newsletter({ sourcePage = "home" }) {
               <label htmlFor="nl-email" className="sr-only">Email address</label>
               <input id="nl-email" type="email" autoComplete="email" value={email}
                 onChange={(e) => setEmail(e.target.value)} placeholder="Your email address"
-                className="h-12 flex-1 rounded-lg border border-slate-600 bg-slate-900 px-4 text-sm text-white outline-none placeholder:text-slate-400 focus:border-blue-400" />
+                className="h-12 w-full shrink-0 rounded-lg border sm:w-auto sm:flex-1 border-slate-600 bg-slate-900 px-4 text-sm text-white outline-none placeholder:text-slate-400 focus:border-blue-400" />
               <input className="hidden" tabIndex={-1} aria-hidden="true" autoComplete="off" value={website}
                 onChange={(e) => setWebsite(e.target.value)} />
               <button type="submit" disabled={busy}

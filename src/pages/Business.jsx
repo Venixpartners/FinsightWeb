@@ -46,6 +46,7 @@ function Business() {
       </div>
 
       <div className="mx-auto max-w-350 px-5 py-10 sm:px-7">
+        <h2 className="sr-only">Top business stories</h2>
         <NewsState state={state} rows={6} emptyText={`No ${label?.toLowerCase()} stories right now.`}>
           {(stories, data) => (
             <>

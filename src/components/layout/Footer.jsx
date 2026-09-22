@@ -49,10 +49,10 @@ export default function Footer() {
         {columns.map((col) => (
           <div key={col.title}>
             <h2 className="mb-5 text-sm font-bold text-white">{col.title}</h2>
-            <ul className="flex flex-col gap-3">
+            <ul className="flex flex-col gap-1">
               {col.links.map((link) => (
                 <li key={link.path}>
-                  <Link to={link.path} className="text-sm text-slate-400 transition hover:text-white">
+                  <Link to={link.path} className="inline-block py-1 text-sm text-slate-400 transition hover:text-white">
                     {link.name}
                   </Link>
                 </li>

@@ -16,6 +16,7 @@ function Companies() {
       <PageIntro title="Companies"
         description="Results, appointments, deals and expansion news from companies operating in Nigeria." />
       <div className="mx-auto max-w-350 px-5 py-10 sm:px-7">
+        <h2 className="sr-only">Company news</h2>
         <NewsState state={state} rows={6}>
           {(stories, data) => (
             <>
