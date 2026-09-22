@@ -8,7 +8,7 @@ import useAsync from "../lib/useAsync";
 import useTitle from "../lib/useTitle";
 
 function Companies() {
-  useTitle("Companies");
+  useTitle();
   const state = useAsync(() => fetchNews({ topic: "companies", limit: 24 }), []);
 
   return (

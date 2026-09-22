@@ -10,7 +10,7 @@ import useAsync from "../lib/useAsync";
 import useTitle from "../lib/useTitle";
 
 function Economy() {
-  useTitle("Economy");
+  useTitle();
   const state = useAsync(() => fetchNews({ topic: "economy", limit: 24 }), []);
 
   return (

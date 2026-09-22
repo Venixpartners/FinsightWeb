@@ -28,7 +28,7 @@ export function A({ href, children }) {
 }
 
 export default function LegalPage({ title, intro, showUpdated = true, children }) {
-  useTitle(title);
+  useTitle();
   return (
     <div className="bg-white">
       <article className="mx-auto max-w-3xl px-5 py-12 sm:px-7">

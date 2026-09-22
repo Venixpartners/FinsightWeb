@@ -24,7 +24,7 @@ const categories = [
 const quickTopics = ["Inflation", "CBN", "Naira", "NGX", "Oil", "Banks", "Tax", "Dangote"];
 
 function Home() {
-  useTitle(null);
+  useTitle();
   const state = useAsync(() => fetchNews({ topic: "all", limit: 18 }), []);
 
   return (

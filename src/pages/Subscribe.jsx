@@ -22,7 +22,7 @@ const facts = [
 ];
 
 function Subscribe() {
-  useTitle("Get SMS updates");
+  useTitle();
   const [params] = useSearchParams();
 
   return (

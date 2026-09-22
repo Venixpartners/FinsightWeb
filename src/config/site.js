@@ -1,6 +1,8 @@
 // Single place for company and offer details used across the site and legal pages.
 export const SITE = {
   name: "FinSight",
+  // Public address of the site. Change this one line when a custom domain is connected.
+  url: "https://finsight-web-mente-rica-s-projects.vercel.app",
   operator: "Venix Partners Limited",
   rcNumber: "RC 1907456",
   address: "35 Yesufu Sanusi Street, Surulere, Lagos, Nigeria",

@@ -20,7 +20,7 @@ const FOCUS = [
 ];
 
 function Business() {
-  useTitle("Business");
+  useTitle();
   const [params] = useSearchParams();
   const focus = FOCUS.some((f) => f.key === params.get("focus")) ? params.get("focus") : "";
   const state = useAsync(() => fetchNews({ topic: "business", focus: focus || undefined, limit: 24 }), [focus]);

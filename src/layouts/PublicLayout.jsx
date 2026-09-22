@@ -1,9 +1,14 @@
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Header from "../components/layout/Header";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 import RatesStrip from "../components/market/RatesStrip";
+import PageErrorBoundary from "../components/common/PageErrorBoundary";
+
+function PageLoading() {
+  return <div className="min-h-screen" aria-busy="true" />;
+}
 
 function PublicLayout() {
   const { pathname } = useLocation();
@@ -18,7 +23,11 @@ function PublicLayout() {
       <Navbar />
       <RatesStrip />
       <main id="content" className="flex-1">
-        <Outlet />
+        <PageErrorBoundary key={pathname}>
+          <Suspense fallback={<PageLoading />}>
+            <Outlet />
+          </Suspense>
+        </PageErrorBoundary>
       </main>
       <Footer />
     </div>
