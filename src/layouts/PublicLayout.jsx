@@ -23,7 +23,7 @@ function PublicLayout() {
       <Navbar />
       <RatesStrip />
       <main id="content" className="flex-1">
-        <PageErrorBoundary key={pathname}>
+        <PageErrorBoundary resetKey={pathname}>
           <Suspense fallback={<PageLoading />}>
             <Outlet />
           </Suspense>

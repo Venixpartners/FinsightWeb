@@ -4,11 +4,18 @@ import { Component } from "react";
 export default class PageErrorBoundary extends Component {
   constructor(props) {
     super(props);
-    this.state = { failed: false };
+    this.state = { failed: false, resetKey: props.resetKey };
   }
 
   static getDerivedStateFromError() {
     return { failed: true };
+  }
+
+  // Stays in place between pages and clears itself when the address changes, so it
+  // can also catch problems while the previous page is being taken down.
+  static getDerivedStateFromProps(props, state) {
+    if (props.resetKey !== state.resetKey) return { failed: false, resetKey: props.resetKey };
+    return null;
   }
 
   render() {

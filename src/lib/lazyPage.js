@@ -1,27 +1,13 @@
 import { lazy } from "react";
+import { hardLoadOnce } from "./recover";
 
-const RELOAD_KEY = "finsight_chunk_reload";
-
-// Loads a page's code on demand. If the file is missing because the site was
-// updated while this tab was open, reload once so the visitor gets the new version.
+// Loads a page's code on demand. If the file cannot be fetched (the site was
+// updated while this tab was open, or an old offline copy is in the way), load
+// the address fresh from the server once so the visitor gets the current version.
 export function lazyPage(loader) {
   const load = () =>
     loader().catch((error) => {
-      let last = 0;
-      try {
-        last = Number(sessionStorage.getItem(RELOAD_KEY)) || 0;
-      } catch {
-        // storage unavailable
-      }
-      if (Date.now() - last > 10000) {
-        try {
-          sessionStorage.setItem(RELOAD_KEY, String(Date.now()));
-        } catch {
-          // storage unavailable
-        }
-        window.location.reload();
-        return new Promise(() => {});
-      }
+      if (hardLoadOnce()) return new Promise(() => {});
       throw error;
     });
   const Component = lazy(load);

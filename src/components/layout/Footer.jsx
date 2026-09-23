@@ -41,9 +41,11 @@ export default function Footer() {
           <p className="max-w-sm text-sm leading-6 text-slate-400">
             Business, market and economy news for Nigeria, on the web and by SMS.
           </p>
-          <p className="mt-5 max-w-sm text-xs leading-5 text-slate-400">
-            FinSight is a service of {SITE.operator} ({SITE.rcNumber}), {SITE.address}. {SITE.licence}.
-          </p>
+          <div className="mt-5 max-w-sm text-xs leading-5 text-slate-400">
+            <p>FinSight is a service of {SITE.operator} ({SITE.rcNumber}).</p>
+            <p>{SITE.address}.</p>
+            <p>{SITE.licence}.</p>
+          </div>
         </div>
 
         {columns.map((col) => (
