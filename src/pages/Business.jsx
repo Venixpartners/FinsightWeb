@@ -1,99 +1,68 @@
-import { useEffect, useState } from "react";
+import { NavLink, useSearchParams } from "react-router-dom";
+import PageIntro from "../components/common/PageIntro";
+import FeatureLayout from "../components/news/FeatureLayout";
+import StoryGrid from "../components/news/StoryGrid";
+import NewsState from "../components/news/NewsState";
+import SourcesNote from "../components/news/SourcesNote";
+import SectionHeading from "../components/common/SectionHeading";
+import { fetchNews } from "../lib/api";
+import useAsync from "../lib/useAsync";
+import useTitle from "../lib/useTitle";
 
-import MarketTicker from "../components/market/MarketTicker";
-
-import BusinessSubNav from "../components/business/BusinessSubNav";
-import BusinessFeatured from "../components/business/BusinessFeatured";
-import BusinessNewsGrid from "../components/business/BusinessNewsGrid";
-import BusinessSpotlight from "../components/business/BusinessSpotlight";
-
-import { mockMarkets } from "../data/mockData";
-
-import { getBusinessNews } from "../services/newsService";
+const FOCUS = [
+  { key: "", name: "All business" },
+  { key: "finance", name: "Finance" },
+  { key: "energy", name: "Energy" },
+  { key: "telecoms", name: "Telecoms" },
+  { key: "startups", name: "Startups" },
+  { key: "retail", name: "Consumer" },
+  { key: "manufacturing", name: "Manufacturing" },
+];
 
 function Business() {
-  const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    async function loadBusinessNews() {
-      try {
-        setLoading(true);
-
-        const news = await getBusinessNews();
-
-        setArticles(news);
-      } catch (error) {
-        console.error("Failed to load business news:", error);
-
-        setError("Unable to load business news at the moment.");
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadBusinessNews();
-  }, []);
-
-  const featuredStories = articles.slice(0, 4);
-
-  const latestStories = articles.slice(4, 10);
-
-  const spotlightStory = articles[0];
+  useTitle();
+  const [params] = useSearchParams();
+  const focus = FOCUS.some((f) => f.key === params.get("focus")) ? params.get("focus") : "";
+  const state = useAsync(() => fetchNews({ topic: "business", focus: focus || undefined, limit: 24 }), [focus]);
+  const label = FOCUS.find((f) => f.key === focus)?.name;
 
   return (
-    <div className="bg-slate-50">
-      {/* Market ticker */}
-      <MarketTicker markets={mockMarkets} />
+    <>
+      <PageIntro title="Business"
+        description="The latest business stories from Nigerian publishers, updated through the day." />
 
-      {/* Business heading */}
-      <section className="bg-white">
-        <div className="mx-auto max-w-350 px-5 py-10 sm:px-7">
-          <p className="text-xs font-bold uppercase tracking-wider text-blue-600">
-            Finsight Business
-          </p>
-
-          <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950 sm:text-4xl">
-            Business
-          </h1>
-
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-500 sm:text-base">
-            The latest business news, company developments, startup activity,
-            financial updates and market-moving stories from Nigeria and around
-            the world.
-          </p>
+      <div className="overflow-x-auto border-b border-slate-200 bg-white">
+        <div className="mx-auto flex min-w-max max-w-350 gap-7 px-5 sm:px-7">
+          {FOCUS.map((f) => (
+            <NavLink key={f.key || "all"} to={f.key ? `/business?focus=${f.key}` : "/business"}
+              className={() =>
+                `border-b-2 py-4 text-sm font-semibold transition ${
+                  focus === f.key ? "border-blue-700 text-blue-700" : "border-transparent text-slate-600 hover:text-blue-700"
+                }`}>
+              {f.name}
+            </NavLink>
+          ))}
         </div>
-      </section>
+      </div>
 
-      {/* Business navigation */}
-      <BusinessSubNav />
-
-      <main className="mx-auto max-w-350 px-5 pb-16 sm:px-7">
-        {loading && (
-          <div className="py-16 text-center text-sm text-slate-500">
-            Loading business news...
-          </div>
-        )}
-
-        {error && (
-          <div className="py-16 text-center text-sm text-red-500">{error}</div>
-        )}
-
-        {!loading && !error && articles.length > 0 && (
-          <>
-            {/* Featured */}
-            <BusinessFeatured stories={featuredStories} />
-
-            {/* Latest */}
-            <BusinessNewsGrid articles={latestStories} />
-
-            {/* Spotlight */}
-            <BusinessSpotlight spotlight={spotlightStory} />
-          </>
-        )}
-      </main>
-    </div>
+      <div className="mx-auto max-w-350 px-5 py-10 sm:px-7">
+        <h2 className="sr-only">Top business stories</h2>
+        <NewsState state={state} rows={6} emptyText={`No ${label?.toLowerCase()} stories right now.`}>
+          {(stories, data) => (
+            <>
+              <FeatureLayout stories={stories} />
+              {stories.length > 6 && (
+                <div className="mt-12">
+                  <SectionHeading title="Latest" />
+                  <StoryGrid stories={stories.slice(6)} />
+                </div>
+              )}
+              <SourcesNote sources={data.sources} />
+            </>
+          )}
+        </NewsState>
+      </div>
+    </>
   );
 }
 

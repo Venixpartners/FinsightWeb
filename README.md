@@ -1,16 +1,34 @@
-# React + Vite
+# FinSight website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Public website for FinSight, a service of Venix Partners Limited. React and Vite on the front end, Vercel functions in `api/` for everything that touches a third party or a secret.
 
-Currently, two official plugins are available:
+## What comes from where
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+| Section | Source | Refresh |
+| --- | --- | --- |
+| News | RSS feeds from Nigerian business publishers, listed in `api/_lib/feeds.js` | Cached 10 minutes at the Vercel edge |
+| Naira rates | ExchangeRate API open access endpoint (attribution shown on site) | Daily at source, cached 15 minutes |
+| Bitcoin | CoinGecko public API | Cached 15 minutes |
+| Economic indicators | Entered by hand in `src/content/indicators.js` from NBS and CBN releases | Update after each release |
 
-## React Compiler
+No figure on the site is invented. If a source fails, the site says so instead of showing an old or estimated number.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Sign ups
 
-## Expanding the ESLint configuration
+`/subscribe` and the newsletter post to `/api/lead`, which calls the `finsight_submit_lead` database function in Supabase. The public key can only call that function; it cannot read the `finsight_leads` table. Duplicate numbers update the existing record.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Numbers by network, channel and status are in the `finsight_lead_summary` view in the Supabase dashboard.
+
+## Keeping things current
+
+* Indicators: edit `src/content/indicators.js` when NBS or CBN publish.
+* SMS stop instruction and price: edit `src/config/site.js`. Set `stopInstruction` once the short code is confirmed.
+* Consent wording: if you change the consent text on the forms, bump `CONSENT_VERSION` in `shared/phone.js`.
+
+## Local development
+
+```
+npm install
+cp .env.example .env   # fill in values
+npx vercel dev          # runs the site and the api functions together
+```
