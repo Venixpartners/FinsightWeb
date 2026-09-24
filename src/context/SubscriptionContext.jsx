@@ -1,72 +1,42 @@
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import SubscriptionPrompt from "../components/subscription/SubscriptionPrompt";
 
 const SubscriptionContext = createContext(null);
 
-const PROMPT_DELAY = 45000;
-const SEEN_KEY = "finsight_prompt_seen";
-const QUIET_PATHS = ["/subscribe", "/privacy", "/terms", "/disclaimer", "/cookies", "/contact"];
+const PROMPT_DELAY = 3000;
+const QUIET_PATHS = ["/subscribe"];
 
-function alreadySeen() {
-  try {
-    return sessionStorage.getItem(SEEN_KEY) === "1";
-  } catch {
-    return false;
-  }
-}
-
-function markSeen() {
-  try {
-    sessionStorage.setItem(SEEN_KEY, "1");
-  } catch {
-    // Private browsing can block storage. The prompt then shows at most once per page load.
-  }
-}
-
-// Shows the SMS offer at most once per browser session: after a visitor
-// opens their second story, or after 45 seconds, whichever comes first.
+// Shows the SMS offer on every page a visitor lands on, a few seconds after
+// the page loads. Dismissing it only closes it for the current page.
 export function SubscriptionProvider({ children }) {
-  const [open, setOpen] = useState(false);
-  const [trigger, setTrigger] = useState("timed_prompt");
-  const shownRef = useRef(alreadySeen());
-  const opened = useRef(0);
   const location = useLocation();
   const navigate = useNavigate();
+  const path = location.pathname;
+  const [openOn, setOpenOn] = useState(null);
+  const open = openOn === path;
 
-  const quiet = QUIET_PATHS.some((p) => location.pathname.startsWith(p));
-
-  const show = useCallback(
-    (why) => {
-      if (shownRef.current || quiet) return;
-      shownRef.current = true;
-      markSeen();
-      setTrigger(why);
-      setOpen(true);
-    },
-    [quiet],
-  );
+  const quiet = QUIET_PATHS.some((p) => path.startsWith(p));
 
   useEffect(() => {
-    const timer = setTimeout(() => show("timed_prompt"), PROMPT_DELAY);
+    if (quiet) return;
+    const timer = setTimeout(() => setOpenOn(path), PROMPT_DELAY);
     return () => clearTimeout(timer);
-  }, [show]);
+  }, [path, quiet]);
 
-  const noteArticleOpened = useCallback(() => {
-    opened.current += 1;
-    if (opened.current >= 2) show("article_click");
-  }, [show]);
+  // Kept so story cards that still call it keep working.
+  const noteArticleOpened = useCallback(() => {}, []);
 
   function goToSubscribe() {
-    setOpen(false);
-    const from = location.pathname.replace(/^\//, "") || "home";
-    navigate(`/subscribe?from=${encodeURIComponent(from)}&trigger=${trigger}`);
+    setOpenOn(null);
+    const from = path.replace(/^\//, "") || "home";
+    navigate(`/subscribe?from=${encodeURIComponent(from)}&trigger=page_view`);
   }
 
   return (
     <SubscriptionContext.Provider value={{ noteArticleOpened }}>
       {children}
-      <SubscriptionPrompt isOpen={open} onClose={() => setOpen(false)} onSubscribe={goToSubscribe} />
+      <SubscriptionPrompt isOpen={open} onClose={() => setOpenOn(null)} onSubscribe={goToSubscribe} />
     </SubscriptionContext.Provider>
   );
 }
